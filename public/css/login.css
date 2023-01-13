@@ -1,0 +1,40 @@
+body{
+    background: #E5E5E5;
+    font-family: sans-serif;
+}
+label{
+    font-size: 13px;
+    display: block;
+    margin-bottom: 6px;
+}
+.panel{ 
+    width: 350px;
+    padding: 29px;
+    margin: 4em auto;
+    background: #fff;
+    border-radius: 8px;
+}
+input {
+width: 100%;
+display: block;
+box-sizing: border-box;
+padding: 9px;
+margin-bottom: 21px;
+border: 1px solid #c7c7c7;
+}
+.submit{
+    background: #14213D;
+    color:#fff
+}
+h4{
+    margin: 5px 4px 26px 0px;
+    text-align: center;
+    font-size: 25px;
+
+}
+a{
+    color: gray;
+}
+.d-none{
+    display: none;   
+}

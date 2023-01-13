@@ -45,8 +45,7 @@ function drag(ev) {
 }
 
 function drop(ev) {
-    ev.preventDefault(); 
-    console.log("ssererere");
+    ev.preventDefault();  
     var data,
         prev_id,
         new_id;
@@ -200,7 +199,8 @@ $(document).ready(function () {
         .on("click", ".task-item", function (e) {
             var items_id,
                 parent_id,
-                editVal;
+                editVal,
+                priority;
             items_id = $(e.target).closest("li").attr("target-id");
             parent_id = $(e.target).closest("ul").attr("task-board");
 
@@ -208,10 +208,10 @@ $(document).ready(function () {
                 .attr("data-task-id", items_id);
 
             editVal = window.task[items_id]
-
+            priority = getPriority(editVal.priority);
             $("#edit-task [name='task_name']").val(editVal.task_name);
             $("#edit-task [name='description']").val(editVal.description);
-            $("#edit-task [name='priority']").val(editVal.priority);
+            $("#edit-task [name='priority']").val(priority);
             $("#edit-task").show();
         })
 
@@ -223,19 +223,33 @@ $(document).ready(function () {
 
     $("#update-task").on("click", function (e) {
         var val, values;
+        var task_item = $("#edit-task").attr("data-task-id")
         val = $("#editfrm-task").serializeArray();
+        priority_id  = getPriorityID(val[2].value);
         values = {
             task_name: val[0].value,
             description: val[1].value,
-            priority: val[2].value
+            priority: priority_id
         };
+        
 
+        var forms = new FormData();;
+        forms.append("task_name", val[0].value);
+        forms.append("description", val[1].value);
+        forms.append("priority", priority_id);
+        forms.append("_method", "PUT");
+        http("api/task/"+task_item, "POST", forms, function (data) {
+            
+            $("#task_name" + task_item).replaceWith(createTask(values, task_item));
+            window.task[task_item] = values;
+            },
+            function (data) {
+                alertMessage(data.responseJSON.message, null)
+        })
 
-        var task_item = $("#edit-task").attr("data-task-id")
-        target = $("#edit-task").attr("data-target");
-
-        taskList[target]["task_items"][task_item] = values;
-        $("#" + task_item).replaceWith(createTask(values, task_item));
+        
+        target = $("#edit-task").attr("data-target"); 
+        
 
         $("#edit-task").hide();
     });
@@ -305,6 +319,14 @@ $(document).ready(function () {
         }
         http("api/task", "POST", forms, success, error)
     });
-    $("")
+    $(".logout").on("click", function(e){
+        e.preventDefault();
+        let success = function (data) {
+            console.log(data);
+        };
+        http("api/auth/logout", "POST", null, success)
+
+
+    })
    
 })

@@ -14,16 +14,15 @@ class Task extends Model
         "priority",
         "start_date",
         "end_date",
-        "description",
-        "sprint_id",
+        "description", 
         "status"
     ];
     protected static function boot()
     {
         // Update user id for all creating
         parent::boot();
-        self::creating(function ($sprint) {
-            $sprint->user_id = auth()->id();
+        self::creating(function ($task) {
+            $task->user_id = auth()->id();
         });
         
     }

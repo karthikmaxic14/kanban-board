@@ -77,4 +77,16 @@ class AuthController extends Controller
             ], 500);
         }
     }
+    public function logout(Request $request)
+    { 
+        $user = $request->user();
+
+        foreach ($user->tokens as $token) {
+            $token->revoke();
+        }
+        return [
+            'message' => 'Tokens Revoked'
+        ];
+
+    }
 }

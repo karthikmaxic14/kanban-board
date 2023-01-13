@@ -20,13 +20,15 @@
             </button>
 
         </div>
-         <button id="14" class="add-task">Logout</button>
+        
+         <button id="14" class="logout">Logout</button>
 
         </div>
     </nav>
     <div class="add-button">
-        <button id="14" class="add-task">Add Task </button>
+ 
         <button class="add-task-board">Add New Task List</button>
+        <button id="14" class="add-task">Add Task </button>
     </div>
     
     <div class="container">
@@ -104,7 +106,7 @@
                     </svg>
                 </span>
             </div>
-            <form action="" id="editfrm-task">
+            <form action="post" id="editfrm-task">
                 <label for="">Title</label>
                 <input type="text" name="task_name" autocomplete="off">
                 <label for="">Description</label>
@@ -159,7 +161,7 @@
                     <option value="true">
                     true
                     </option>
-                    <option value="false">
+                    <option value="false" selected>
                     false
                     </option>
                 </select>
