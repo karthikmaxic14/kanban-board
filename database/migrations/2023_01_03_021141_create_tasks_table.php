@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer("priority");
             $table->timestamp("start_date")->nullable();
             $table->timestamp("end_date")->nullable();
-            $table->string("description")->nullable();
+            $table->text("description")->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('comapany_id')->nullable();    

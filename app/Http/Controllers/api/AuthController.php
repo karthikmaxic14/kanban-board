@@ -20,7 +20,7 @@ class AuthController extends Controller
             if(!Auth::attempt($request->only(['name', 'password']))){
                 return response()->json([
                     'status' => false,
-                    'message' => 'Name & Password does not match with our record.',
+                    'message' => 'Invalide Login',
                 ], 401);
             }
 
@@ -79,14 +79,11 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     { 
-        $user = $request->user();
-
-        foreach ($user->tokens as $token) {
-            $token->revoke();
-        }
-        return [
-            'message' => 'Tokens Revoked'
-        ];
-
+        Auth::guard('web')->logout();
+        return response()->json([
+            'status' => true,
+            'message' => 'User logout successfully',
+             
+        ], 200);
     }
 }

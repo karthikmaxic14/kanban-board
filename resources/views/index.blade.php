@@ -75,10 +75,10 @@
                     </option>
                 </select>
                 <label for="">Start Date</label>
-                <input type="date" name="startdate" autocomplete="off">
+                <input type="date" name="start_date" autocomplete="off">
                 
                 <label for="">End  Date</label>
-                <input type="date" name="enddate" autocomplete="off">
+                <input type="date" name="end_date" autocomplete="off">
             </form>
             <div class="footer">
                 <button class="primary" id="bt-task">

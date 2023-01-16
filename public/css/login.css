@@ -38,3 +38,14 @@ a{
 .d-none{
     display: none;   
 }
+.error-message{ 
+    height: 17px;
+    text-align: center;
+    color: red;
+    border: 1px solid;
+    padding: 10px;
+    margin-block-end: 15px;
+}
+.show{
+    display: block;
+}

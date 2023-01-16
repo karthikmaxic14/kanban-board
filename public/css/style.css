@@ -24,6 +24,12 @@ button,
 .d-flex {
     display: flex;
 }
+.w-50{
+    flex:0 0 50%
+}
+.f-sm{
+    font-size: 13px;
+}
 .d-flex button{
     border: 0;
     padding: 5px 12px;
@@ -254,4 +260,7 @@ background: #555;
     display: flex;
     justify-content: end;
     padding: 23px 20px;
+}
+.text-right {
+    text-align:right;
 }

@@ -16,9 +16,7 @@ function getPriority(index){
 function getPriorityID(index){ 
     
     let data = ["low", "medium","high"];
-    
     let id = data.indexOf(index);
-    
     return id+1;
 } 
 function http(path, method, form, success, error = null){

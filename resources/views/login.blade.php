@@ -13,7 +13,7 @@
             <form   id="form-data" method="POST" action="">
             <div>
                 <h4> User Login</h4>
-
+                <span class="error-message d-none"></span>
                 <label for="">
                     User Name
                 </label>
@@ -27,6 +27,7 @@
                 <input type="password" name="password" autocomplete="off">
             </div>
             <div >
+            
                 <input type="submit" class="submit">
                 <a href="#" class="create-user"> Create account</a>
             </div>
@@ -54,6 +55,7 @@
                 <input type="password" name="password" autocomplete="off">
             </div>
             <div >
+                
                 <input type="submit" class="regiter-new-user">
                 <a href="#" class="back-sing-in"> Back to Sing in</a>
             </div>
@@ -92,8 +94,10 @@
                 }
             };
             
-            error = function (Data) {
-
+            error = function (Data, error) {
+                console.log(Data.responseJSON.message, error);
+                $(".error-message").addClass("show"); 
+                $(".error-message").text(Data.responseJSON.message)
             } 
             
             http(  "api/auth/login",
@@ -113,12 +117,14 @@
             formData = new FormData(forms); 
             
             success = function(Data){ 
-                if (Data.status == true){
+                if (Data.status == true){ 
+
                     setToken(Data.token)
                     window.location = base_url
                 }
             };
-            error = function (Data) {
+            error = function (data) {
+                
             } 
             
             http(  "api/auth/register",
