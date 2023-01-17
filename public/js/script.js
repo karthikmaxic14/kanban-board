@@ -95,7 +95,7 @@ function createTask({ task_name, priority, description, end_date}, id) {
         '<h4>' + task_name + '</h4>' +
         '<p>' + description + '</p><span class="task-item-close">' +
         '<svg height="10px" style="margin-top:3px" viewBox="0 0 311 311.07733" width="10px" xmlns="http://www.w3.org/2000/svg"><path d="m16.035156 311.078125c-4.097656 0-8.195312-1.558594-11.308594-4.695313-6.25-6.25-6.25-16.382812 0-22.632812l279.0625-279.0625c6.25-6.25 16.382813-6.25 22.632813 0s6.25 16.382812 0 22.636719l-279.058594 279.058593c-3.136719 3.117188-7.234375 4.695313-11.328125 4.695313zm0 0"></path><path d="m295.117188 311.078125c-4.097657 0-8.191407-1.558594-11.308594-4.695313l-279.082032-279.058593c-6.25-6.253907-6.25-16.386719 0-22.636719s16.382813-6.25 22.636719 0l279.058594 279.0625c6.25 6.25 6.25 16.382812 0 22.632812-3.136719 3.117188-7.230469 4.695313-11.304687 4.695313zm0 0"></path></svg></span>' +
-        '<div class="d-flex f-sm"><div class="w-50"><span class=" "> Due date: ' + s.getDate()+ "-" +s.getMonth() +"-"+ s.getFullYear()  + '</span> </div><div  class="w-50 text-right "> Status <span class="status ' + priority + '">' + priority + '</span></div> </div></li>';
+        '<div class="d-flex f-sm"><div class="w-50"><span class=" "> <b>Due date: </b>' + s.getDate()+ "-" +s.getMonth() +"-"+ s.getFullYear()  + '</span> </div><div  class="w-50 text-right "><b> Status: </b> <span class="status ' + priority + '">' + priority + '</span></div> </div></li>';
     li = $.parseHTML(li);
     taskItem++;
     return li;
@@ -168,8 +168,14 @@ $(document).ready(function () {
 
         }
     )
-
-
+    $("[name='start_date']").datepicker({
+        dateFormat: "yy-mm-dd"
+      });
+      
+    $("[name='end_date']").datepicker({
+        dateFormat: "yy-mm-dd"
+      });
+    
     $(".board")
         .on("click", ".task-close", function (e) {
             if (confirm(" Are you sure want to delete Task board")) {
@@ -225,21 +231,17 @@ $(document).ready(function () {
 
 
     $("#update-task").on("click", function (e) {
-        var val, values;
-        var task_item = $("#edit-task").attr("data-task-id")
+        var val, values,
+                task_item, forms;
+        task_item = $("#edit-task").attr("data-task-id")
         val = $("#editfrm-task").serializeArray();
         priority_id  = getPriorityID(val[2].value);
-        values = {
-            task_name: val[0].value,
-            description: val[1].value,
-            priority: priority_id
-        };
-        
-
-        var forms = new FormData();;
+        forms = new FormData();;
         forms.append("task_name", val[0].value);
         forms.append("description", val[1].value);
         forms.append("priority", priority_id);
+        forms.append("start_date", val[3].value);
+        forms.append("end_date", val[4].value);
         forms.append("_method", "PUT");
         http("api/task/"+task_item, "POST", forms, function (data) {
             

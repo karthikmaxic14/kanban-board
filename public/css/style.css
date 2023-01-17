@@ -28,7 +28,10 @@ button,
     flex:0 0 50%
 }
 .f-sm{
-    font-size: 13px;
+    font-size: 12px;
+}
+.f-sm b{
+    color:#262626
 }
 .d-flex button{
     border: 0;

@@ -7,6 +7,8 @@
     <title>kanbanboard</title>
     <link rel="stylesheet" href="{{  URL::asset('css/style.css')}}" type="text/css" />
     <script src="{{  URL::asset('js/lib/jquery.js')}}" ></script> 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     
 </head>
 <body>
@@ -75,10 +77,10 @@
                     </option>
                 </select>
                 <label for="">Start Date</label>
-                <input type="date" name="start_date" autocomplete="off">
+                <input type="text" name="start_date" autocomplete="off">
                 
                 <label for="">End  Date</label>
-                <input type="date" name="end_date" autocomplete="off">
+                <input type="text" name="end_date" autocomplete="off">
             </form>
             <div class="footer">
                 <button class="primary" id="bt-task">
@@ -124,6 +126,11 @@
                         High
                     </option>
                 </select>
+                <label for="">Start Date</label>
+                <input type="text" name="start_date" autocomplete="off">
+                
+                <label for="">End  Date</label>
+                <input type="text" name="end_date" autocomplete="off">
             </form>
             <div class="footer">
                 <button class="primary" id="update-task">
