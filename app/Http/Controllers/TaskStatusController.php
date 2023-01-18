@@ -16,10 +16,16 @@ class TaskStatusController extends BaseController
         return   ResourcesTaskStatus::collection(TaskStatus::all());
     }
     public function store (Request $request) {
-        // validator()
-        $input = $request->get("task-board-title");
-        $default = $request->get("default_status") == true? 1:0;
-        return TaskStatus::create(["title" => $input, "default_status"=>$default]);
+        try {
+            $input = $request->get("task-board-title");
+            $default = $request->get("default_status") == true? 1:0;
+            return TaskStatus::create(["title" => $input, "default_status"=>$default]);
+             
+
+        } catch (\Exception $e){
+            return $this->sendResponse("Record not found".$e->getMessage()  );
+        }
+        
     }   
     public function delete(TaskStatus $taskstatus, $id){
         
@@ -30,7 +36,7 @@ class TaskStatusController extends BaseController
             $task->delete();
             return $this->sendResponse("Task Status Deleted Successfully");
         } catch (\Exception $e){
-            return $this->sendResponse("Record not found".$e->getMessage()  );
+            return $this->sendResponse("Record not found ".$e->getMessage()  );
         }
 
     }

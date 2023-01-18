@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{  URL::asset('css/style.css')}}" type="text/css" />
     <script src="{{  URL::asset('js/lib/jquery.js')}}" ></script> 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="{{  URL::asset('js/lib/jquery-ui.js')}}"></script>
     
 </head>
 <body>

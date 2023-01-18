@@ -209,7 +209,7 @@ $(document).ready(function () {
             var items_id,
                 parent_id,
                 editVal,
-                priority;
+                priority, start_date, end_date;
             items_id = $(e.target).closest("li").attr("target-id");
             parent_id = $(e.target).closest("ul").attr("task-board");
 
@@ -221,6 +221,10 @@ $(document).ready(function () {
             $("#edit-task [name='task_name']").val(editVal.task_name);
             $("#edit-task [name='description']").val(editVal.description);
             $("#edit-task [name='priority']").val(priority);
+            var start_date = new Date(editVal.start_date)
+            $("#edit-task [name='start_date']").val(start_date.getFullYear()+ "-" +start_date.getMonth() +"-"+ start_date.getDate() );
+            var end_date = new Date(editVal.end_date)
+            $("#edit-task [name='end_date']").val(end_date.getFullYear()+ "-" +end_date.getMonth() +"-"+ end_date.getDate());
             $("#edit-task").show();
         })
 
