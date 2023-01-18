@@ -45,7 +45,7 @@ function drag(ev) {
 }
 
 function drop(ev) {
-    ev.preventDefault();  
+    ev.preventDefault();
     var data,
         prev_id,
         new_id;
@@ -84,18 +84,17 @@ function createTaskboard(title, id) {
 
     return taskBoard;
 }
-function createTask({ task_name, priority, description, end_date}, id) {
+function createTask({ task_name, priority, description, end_date }, id) {
     var li;
 
     priority = getPriority(priority);
-    var s = new Date(  end_date)
+    var s = new Date(end_date)
 
-  console.log(s);   
     li = '<li id="task_name' + id + '" target-id="' + id + '" draggable="true" ondragstart="drag(event)" class="task-item">' +
         '<h4>' + task_name + '</h4>' +
         '<p>' + description + '</p><span class="task-item-close">' +
         '<svg height="10px" style="margin-top:3px" viewBox="0 0 311 311.07733" width="10px" xmlns="http://www.w3.org/2000/svg"><path d="m16.035156 311.078125c-4.097656 0-8.195312-1.558594-11.308594-4.695313-6.25-6.25-6.25-16.382812 0-22.632812l279.0625-279.0625c6.25-6.25 16.382813-6.25 22.632813 0s6.25 16.382812 0 22.636719l-279.058594 279.058593c-3.136719 3.117188-7.234375 4.695313-11.328125 4.695313zm0 0"></path><path d="m295.117188 311.078125c-4.097657 0-8.191407-1.558594-11.308594-4.695313l-279.082032-279.058593c-6.25-6.253907-6.25-16.386719 0-22.636719s16.382813-6.25 22.636719 0l279.058594 279.0625c6.25 6.25 6.25 16.382812 0 22.632812-3.136719 3.117188-7.230469 4.695313-11.304687 4.695313zm0 0"></path></svg></span>' +
-        '<div class="d-flex f-sm"><div class="w-50"><span class=" "> <b>Due date: </b>' + s.getDate()+ "-" +s.getMonth() +"-"+ s.getFullYear()  + '</span> </div><div  class="w-50 text-right "><b> Status: </b> <span class="status ' + priority + '">' + priority + '</span></div> </div></li>';
+        '<div class="d-flex f-sm"><div class="w-50"><span class=" "> <b>Due date: </b>' + s.getDate() + "-" + ('0' + (s.getMonth() + 1)).slice(-2) + "-" + s.getFullYear() + '</span> </div><div  class="w-50 text-right "><b> Status: </b> <span class="status ' + priority + '">' + priority + '</span></div> </div></li>';
     li = $.parseHTML(li);
     taskItem++;
     return li;
@@ -155,27 +154,31 @@ function getTaskData() {
 
 $(document).ready(function () {
     window.task = [];
-    http("api/task-status", "GET", null,
-        function (data) {
-            Init(data);
-            getTaskData()
-        },
-        function (data) {
+    var success,
+        error;
+    success = function (data) {
+                Init(data);
+                getTaskData()
+            };
+    error = function (data) {
             if (data.responseJSON.error == "Unauthenticated.") {
                 removeToken("token");
-                window.location = base_url+"login"
+                window.location = base_url + "login"
             }
 
-        }
+        };
+    http("api/task-status", "GET", null,
+        success,
+        error
     )
     $("[name='start_date']").datepicker({
         dateFormat: "yy-mm-dd"
-      });
-      
+    });
+
     $("[name='end_date']").datepicker({
         dateFormat: "yy-mm-dd"
-      });
-    
+    });
+
     $(".board")
         .on("click", ".task-close", function (e) {
             if (confirm(" Are you sure want to delete Task board")) {
@@ -222,9 +225,9 @@ $(document).ready(function () {
             $("#edit-task [name='description']").val(editVal.description);
             $("#edit-task [name='priority']").val(priority);
             var start_date = new Date(editVal.start_date)
-            $("#edit-task [name='start_date']").val(start_date.getFullYear()+ "-" +start_date.getMonth() +"-"+ start_date.getDate() );
+            $("#edit-task [name='start_date']").val(start_date.getFullYear() + "-" + ('0' + (start_date.getMonth() + 1)).slice(-2) + "-" + start_date.getDate());
             var end_date = new Date(editVal.end_date)
-            $("#edit-task [name='end_date']").val(end_date.getFullYear()+ "-" +end_date.getMonth() +"-"+ end_date.getDate());
+            $("#edit-task [name='end_date']").val(end_date.getFullYear() + "-" + ('0' + (end_date.getMonth() + 1)).slice(-2) + "-" + end_date.getDate());
             $("#edit-task").show();
         })
 
@@ -235,11 +238,12 @@ $(document).ready(function () {
 
 
     $("#update-task").on("click", function (e) {
-        var val, values,
-                task_item, forms;
+        var val,
+            task_item, forms, success, error;
         task_item = $("#edit-task").attr("data-task-id")
         val = $("#editfrm-task").serializeArray();
-        priority_id  = getPriorityID(val[2].value);
+        priority_id = getPriorityID(val[2].value);
+        
         forms = new FormData();;
         forms.append("task_name", val[0].value);
         forms.append("description", val[1].value);
@@ -247,19 +251,18 @@ $(document).ready(function () {
         forms.append("start_date", val[3].value);
         forms.append("end_date", val[4].value);
         forms.append("_method", "PUT");
-        http("api/task/"+task_item, "POST", forms, function (data) {
-            
-            $("#task_name" + task_item).replaceWith(createTask(values, task_item));
-            window.task[task_item] = values;
-            },
-            function (data) {
-                alertMessage(data.responseJSON.message, null)
-        })
-
         
-        target = $("#edit-task").attr("data-target"); 
-        
+        success = function (data) {
 
+            $("#task_name" + task_item).replaceWith(createTask(data.data, data.data.id));
+            window.task[task_item] = data.data;
+        };
+        error = function (data) {
+            alertMessage(data.responseJSON.message, null)
+        };
+
+        http("api/task/" + task_item, "POST", forms, success, error);
+        target = $("#edit-task").attr("data-target");
         $("#edit-task").hide();
     });
 
@@ -318,24 +321,25 @@ $(document).ready(function () {
         let forms = new FormData(formData);
 
         let success = function (data) {
-            var item = createTask(data.data, data.data.task_type)
+            var item = createTask(data.data, data.data.id)
             $("[task-board='" + data.data.task_type + "']").prepend(item);
             $("#add-task").trigger("reset");
             $("#new-task").hide();
+            window.task[data.data.id] = data.data
         };
         let error = function (data) {
             alertMessage(data.responseJSON.message, null)
         }
         http("api/task", "POST", forms, success, error)
     });
-    $(".logout").on("click", function(e){
+    $(".logout").on("click", function (e) {
         e.preventDefault();
         let success = function (data) {
             console.log(data.staus);
-            if(data.status){
+            if (data.status) {
                 removeToken("token");
                 window.location = "http://localhost:8000/login";
-                
+
 
             }
         };
@@ -343,5 +347,5 @@ $(document).ready(function () {
 
 
     })
-   
+
 })
