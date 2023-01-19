@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTask;
 use App\Models\Task;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\UpdateTask;
 use App\Models\TaskStatus;
 use Auth;
 use Exception;
@@ -20,7 +21,6 @@ class TaskController extends BaseController
      */
     public function index()
     {
-
         $taskData = Task::all();
         return $this->sendResponse("", $taskData);
     }
@@ -40,7 +40,7 @@ class TaskController extends BaseController
             $data = Task::create( $input);
             return $this->sendResponse("",$data);
         } catch(\Exception $e) {
-            return $this->sendResponse("Some thing went . ".$e->getMessage() ,null,400);
+            return $this->sendResponse("Some thing went . ",null,400);
         }
         
     }
@@ -63,17 +63,17 @@ class TaskController extends BaseController
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTask $request, $id)
     {
 
         try { 
             $task = Task::findOrFail($id);
             $task->update($request->all());
-            return $this->sendResponse("", $task);
+            return $this->sendResponse("Task Updated Successfully", $task);
 
         } catch (Exception $e) {
             
-            return $this->sendResponse("Task Not found".$e->getMessage()    ,null,false, 404  );
+            return $this->sendResponse("Record not found",$e->getMessage(),false, 404  );
         }
         
         // return $this->sendResponse("",$data);
@@ -93,7 +93,6 @@ class TaskController extends BaseController
             return $this->sendResponse("Task Successfully deleted", null);
         } catch (Exception $e) {
             return $this->sendResponse("Record not found", null, false);
-
         }
     }
 }

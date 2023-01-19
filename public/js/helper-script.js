@@ -37,9 +37,15 @@ function http(path, method, form, success, error = null){
         error:error
     });
 }
-function alertMessage(message, type){
+function alertMessage(message, type=null){
     $("#message").fadeIn(500);
-    $("#message span").text(message);
+    $("#message span").text(message); 
+    if (type){
+        $("#message").addClass(type) 
+    } else {
+        $("#message").removeClass(type) 
+    }
+
     setTimeout(() => {
         $("#message").fadeOut(500);
     }, 5000);

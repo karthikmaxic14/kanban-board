@@ -70,6 +70,7 @@ function drop(ev) {
 
 }
 function createTaskboard(title, id) {
+    console.log(title)
     var taskBoard, taskList_content;
 
     taskList_content = '<div class="header"><h2>' + title + '</h2>' +
@@ -180,18 +181,7 @@ $(document).ready(function () {
     });
 
     $(".board")
-        .on("click", ".task-close", function (e) {
-            if (confirm(" Are you sure want to delete Task board")) {
-                var temp, ids;
-                temp = $(e.target).closest(".task-list");
-                ids = $(temp).find("[task-board]").attr("task-board");
-                http("api/task-status/" + ids, "DELETE", null, function (data) {
-
-                })
-                temp.remove();
-
-            }
-        })
+    
         .on("click", ".task-item-close", function (e) {
             if (confirm(" Are you sure want to delete Task")) {
                 var li,
@@ -205,8 +195,9 @@ $(document).ready(function () {
                 http("api/task/" + itemId, "DELETE", null, function (data) {
                     li.remove();
                 });
-
-            }
+            
+            } 
+            e.stopPropagation();
         })
         .on("click", ".task-item", function (e) {
             var items_id,
@@ -230,13 +221,84 @@ $(document).ready(function () {
             $("#edit-task [name='end_date']").val(end_date.getFullYear() + "-" + ('0' + (end_date.getMonth() + 1)).slice(-2) + "-" + end_date.getDate());
             $("#edit-task").show();
         })
+        .on("click", ".task-close", function (e) { 
+            e.preventDefault();
+            if (confirm(" Are you sure want to delete Task board")) {
+                var temp, ids;
+                temp = $(e.target).closest(".task-list");
+                ids = $(temp).find("[task-board]").attr("task-board");
+                http("api/task-status/" + ids, "DELETE", null, function (data) {
+                })
+                temp.remove();
+                
+            }
+        })
 
+    /**
+     * Add task
+     */
     $(".add-task").on("click", function (e) {
         $("#new-task").attr("data-target", $(e.target).attr("id"));
         $("#new-task").show();
     });
 
+    /**
+     * Add task list
+     */
+    $("#new-task-board .primary").on("click", function (e) {
+        var title, taskB_id;
+        title = $("[name='task-board-title']").val();
 
+
+        var formData = $("#add-task-board")[0]
+        var forms = new FormData(formData);
+        http("api/task-status", "POST", forms, function (result) {
+            
+            var board = createTaskboard(result.data.name, result.data.id)
+            $(".btn-board").before(board);
+            alertMessage(result.message, "success");
+        },
+            function (data) {
+                alertMessage(result.message, null)
+            })
+        $("[name='task-board-title']").val("");
+        $("#new-task-board").hide();
+
+    });
+    
+    /**
+     * Adding New task
+     */
+
+    $("#bt-task").on("click", function (e) {
+        var val,
+            item,
+            target,
+            values;
+
+        target = $("#new-task").attr("data-target");
+        $("#task_type").val(target);
+        let formData = $("#add-task")[0]
+
+        let forms = new FormData(formData);
+
+        let success = function (data) {
+            var item = createTask(data.data, data.data.id)
+            $("[task-board='" + data.data.task_type + "']").prepend(item);
+            $("#add-task").trigger("reset");
+            $("#new-task").hide();
+            window.task[data.data.id] = data.data
+        };
+        let error = function (data) {
+            alertMessage(data.responseJSON.message, null)
+        }
+        http("api/task", "POST", forms, success, error)
+    });
+
+    
+    /** 
+     * Update Task 
+     */
     $("#update-task").on("click", function (e) {
         var val,
             task_item, forms, success, error;
@@ -267,71 +329,9 @@ $(document).ready(function () {
     });
 
 
-    $(".popup .close").on("click", function (e) {
-        $(".popup").hide();
-    })
-
-    $(".add-task-board").on("click", function (e) {
-        $("#new-task-board").show();
-
-    });
-
-    $("#new-task-board .primary").on("click", function (e) {
-        var title, taskB_id;
-        title = $("[name='task-board-title']").val();
-
-
-        var formData = $("#add-task-board")[0]
-        var forms = new FormData(formData);
-        http("api/task-status", "POST", forms, function (data) {
-
-            var board = createTaskboard(data.title, data.id)
-            $(".btn-board").before(board);
-
-        },
-            function (data) {
-                alertMessage(data.responseJSON.message, null)
-            })
-
-
-
-        $("[name='task-board-title']").val("");
-        $("#new-task-board").hide();
-
-    });
-
-
-
-    $("#search-input").keyup(function (e) {
-        var search;
-        search = e.target.value
-        serach(search);
-    });
-
-    $("#bt-task").on("click", function (e) {
-        var val,
-            item,
-            target,
-            values;
-
-        target = $("#new-task").attr("data-target");
-        $("#task_type").val(target);
-        let formData = $("#add-task")[0]
-
-        let forms = new FormData(formData);
-
-        let success = function (data) {
-            var item = createTask(data.data, data.data.id)
-            $("[task-board='" + data.data.task_type + "']").prepend(item);
-            $("#add-task").trigger("reset");
-            $("#new-task").hide();
-            window.task[data.data.id] = data.data
-        };
-        let error = function (data) {
-            alertMessage(data.responseJSON.message, null)
-        }
-        http("api/task", "POST", forms, success, error)
-    });
+    /**
+     * Logout Action button
+     */
     $(".logout").on("click", function (e) {
         e.preventDefault();
         let success = function (data) {
@@ -344,8 +344,32 @@ $(document).ready(function () {
             }
         };
         http("api/auth/logout", "POST", null, success)
-
-
     })
+
+    /**
+     * Search Task
+    */
+    $("#search-input").keyup(function (e) {
+        var search;
+        search = e.target.value
+        serach(search);
+    });
+
+    /**
+     * Close Popup
+     */    
+
+    $(".popup .close").on("click", function (e) {
+        $(".popup").hide();
+    })
+    /**
+     * open task list Popup
+     */    
+
+    $(".add-task-board").on("click", function (e) {
+        $("#new-task-board").show();
+
+    });
+
 
 })

@@ -259,6 +259,9 @@ background: #555;
     right: 36px;
     display: none;
 }
+.alert.success{
+    background: #04a304 !important;
+}
 .add-button {
     display: flex;
     justify-content: end;

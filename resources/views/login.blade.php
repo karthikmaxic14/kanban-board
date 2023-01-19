@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login page</title>
+    <title>Login - Kanbanboard</title>
     <link rel="stylesheet" href="{{  URL::asset('css/login.css')}}" type="text/css" />    
     <script src="{{  URL::asset('js/lib/jquery.js')}}" ></script> 
 </head>
@@ -64,6 +64,5 @@
   
     <script src="{{  URL::asset('js/helper-script.js')}}" ></script> 
     <script src="{{  URL::asset('js/login.js')}}" ></script> 
-    
 </body>
 </html>

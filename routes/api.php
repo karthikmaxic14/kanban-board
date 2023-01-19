@@ -18,39 +18,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::post('/auth/register', [AuthController::class,'createUser']);
-Route::post('/auth/login', [AuthController::class,'loginUser']);
-Route::post('/auth/logout', [AuthController::class,'logout'])->middleware('auth:sanctum');
+Route::get('/login', [AuthController::class, 'login']);
+
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
-Route::get('/auth/test',   function (){
-    
-})->middleware('auth:sanctum');
-
-Route::prefix('task')->middleware('auth:sanctum')->group(function (){
+Route::prefix('task')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [TaskController::class, 'index']);
-    Route::post('/', [TaskController::class, 'store']);     
+    Route::post('/', [TaskController::class, 'store']);
     Route::get('/{id}', [TaskController::class, 'show']);
     Route::put('/{id}', [TaskController::class, 'update']);
-    Route::delete('/{id}', [TaskController::class, 'destroy']);     
+    Route::delete('/{id}', [TaskController::class, 'destroy']);
 });
 
-Route::prefix('task-status')->middleware('auth:sanctum')->group(function (){
-    Route::get('/', [TaskStatusController::class, 'index']); 
+Route::prefix('task-status')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [TaskStatusController::class, 'index']);
     Route::post('/', [TaskStatusController::class, 'store']);
-    Route::delete('/{id}', [TaskStatusController::class, 'delete']); 
+    Route::delete('/{id}', [TaskStatusController::class, 'delete']);
 });
 
-Route::prefix('board')->middleware('auth:sanctum')->group(function (){
-    Route::apiResource('/', BoardController::class); 
-    
-});
 
-Route::get('/login',[AuthController::class,'login']);
- 
+
 # list print 
 # kanbanboard
 # create board
@@ -64,4 +54,3 @@ Route::get('/login',[AuthController::class,'login']);
 # task status edit 
 # task status delete 
 # task status updated
- 

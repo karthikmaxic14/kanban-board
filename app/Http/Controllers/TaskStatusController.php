@@ -12,16 +12,15 @@ class TaskStatusController extends BaseController
 {
     public function index(TaskStatus $taskstatus)
     {
-        
-        return   ResourcesTaskStatus::collection(TaskStatus::all());
+        return   ResourcesTaskStatus::collection(taskstatus::all());
     }
     public function store (Request $request) {
         try {
             $input = $request->get("task-board-title");
             $default = $request->get("default_status") == true? 1:0;
-            return TaskStatus::create(["title" => $input, "default_status"=>$default]);
-             
-
+            $task_status =  TaskStatus::create(["title" => $input, "default_status"=>$default]);
+            return $this->sendResponse("Task Status added Successfully" ,   new ResourcesTaskStatus($task_status));
+            
         } catch (\Exception $e){
             return $this->sendResponse("Record not found".$e->getMessage()  );
         }
