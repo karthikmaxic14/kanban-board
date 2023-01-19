@@ -3,7 +3,7 @@ Kanban Board using Laravel with Jquery and sanctum
 
 ### Quick Project Setup
 
-1. Run ** git clone https://github.com/karthikmaxic14/kanban-board**
+1. Run ** git clone https://github.com/karthikmaxic14/kanban-board **
 
 2. Create a MySQL database for the project
 	Add database name and mysql user name and password in `.env ` file
