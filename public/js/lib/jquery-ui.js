@@ -19050,7 +19050,7 @@ if ( $.uiBackCompat !== false ) {
 				tooltipData.tooltip.addClass( this.options.tooltipClass );
 			}
 			return tooltipData;
-		}
+		}	
 	} );
 }
 
