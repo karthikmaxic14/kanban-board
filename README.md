@@ -1,4 +1,4 @@
-# Kanban Board in Laravel  and  Jquery
+# Kanban Board in Laravel  and  Sanctum Rest API
 Kanban Board using Laravel with Jquery and sanctum
 
 ### Quick Project Setup
