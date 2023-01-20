@@ -14,7 +14,15 @@ Kanban Board using Laravel with Jquery and sanctum
 
 5.   Run ``` $ php artisan key:generate ```
 
-6.  start the server ``` $ php artisan serve ```
+6.   Run ``` $ php artisan db:seed ```
 
-7. Go to http://localhost:8000/
-### Create Account 
+7.  start the server ``` $ php artisan serve ```
+
+8. Go to http://localhost:8000/
+
+### Create User Account
+
+1. Click Create account link 
+
+2. Enter User name and Email id and password
+
