@@ -63,9 +63,9 @@ function drop(ev) {
     var forms = new FormData();;
     forms.append("task_type", new_id);
     forms.append("_method", "PUT");
-    http("api/task/" + temp, "post", forms, function (data) {
-
-    })
+    http("api/task/" + temp+"/status", "post", forms, function (data) {
+         alertMessage(data.message, "success")   
+    })  
 
 
 }
@@ -253,12 +253,12 @@ $(document).ready(function () {
         var formData = $("#add-task-board")[0]
         var forms = new FormData(formData);
         http("api/task-status", "POST", forms, function (result) {
-            
-            var board = createTaskboard(result.data.name, result.data.id)
+             var board = createTaskboard(result.data.name, result.data.id)
             $(".btn-board").before(board);
             alertMessage(result.message, "success");
-        },
-            function (data) {
+            },
+            function (result) {
+                console.log(result.message);
                 alertMessage(result.message, null)
             })
         $("[name='task-board-title']").val("");

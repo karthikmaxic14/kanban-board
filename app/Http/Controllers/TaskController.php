@@ -95,4 +95,18 @@ class TaskController extends BaseController
             return $this->sendResponse("Record not found", null, false);
         }
     }
+    public function statusUpdate(Request $request, $id){
+    
+        try { 
+            $task = Task::findOrFail($id);
+            $task->update($request->all());
+            return $this->sendResponse("Task Status  Updated Successfully", $task);
+
+        } catch (Exception $e) {
+            
+            return $this->sendResponse("Record not found",$e->getMessage(),false, 404  );
+        } 
+    }
+
+    
 }

@@ -17,8 +17,13 @@ class TaskStatusController extends BaseController
     public function store (Request $request) {
         try {
             $input = $request->get("task-board-title");
-            $default = $request->get("default_status") == true? 1:0;
+            $default = $request->get("default_status") == 'true'    ? 1:0;
+            if($default) {
+                TaskStatus::default ()->update([ "default_status" => 0]);
+
+            }
             $task_status =  TaskStatus::create(["title" => $input, "default_status"=>$default]);
+            
             return $this->sendResponse("Task Status added Successfully" ,   new ResourcesTaskStatus($task_status));
             
         } catch (\Exception $e){

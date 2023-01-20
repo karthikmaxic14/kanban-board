@@ -31,6 +31,7 @@ Route::prefix('task')->middleware('auth:sanctum')->group(function () {
     Route::get('/{id}', [TaskController::class, 'show']);
     Route::put('/{id}', [TaskController::class, 'update']);
     Route::delete('/{id}', [TaskController::class, 'destroy']);
+    Route::put('/{id}/status', [TaskController::class, 'statusUpdate']);
 });
 
 Route::prefix('task-status')->middleware('auth:sanctum')->group(function () {
