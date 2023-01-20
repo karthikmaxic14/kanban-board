@@ -10,7 +10,7 @@ Kanban Board using Laravel with Jquery and sanctum
 
 3. Run this command in terminal ```  $ composer update```
 
-4. Now run migrations ``` $ php artisan mxigrate ```
+4. Now run migrations ``` $ php artisan migrate ```
 
 5.   Run ``` $ php artisan key:generate ```
 
