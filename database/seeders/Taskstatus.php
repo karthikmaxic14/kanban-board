@@ -17,15 +17,18 @@ class Taskstatus extends Seeder
     {
         DB::table('taskstatuses')->insert([[
             'title' => 'To - Do',
-            'default_status' => 1
+            'default_status' => 1,
+            'order' =>1
         ], 
         [
             'title' => 'In - Progress',
-            'default_status' => 0
+            'default_status' => 0,
+            'order' =>2
         ],
         [
             'title' => 'Completed',
-            'default_status' => 0
+            'default_status' => 0,
+            'order' =>3
         ] ]);
     }
 }

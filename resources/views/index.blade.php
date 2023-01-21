@@ -9,7 +9,9 @@
     <script src="{{  URL::asset('js/lib/jquery.js')}}" ></script> 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="{{  URL::asset('js/lib/jquery-ui.js')}}"></script>
-    
+    <style>
+       
+        </style>
 </head>
 <body>
 <nav>
@@ -30,7 +32,8 @@
     <div class="add-button">
  
         <button class="add-task-board">Add New Task List</button>
-        <button id="14" class="add-task">Add Task </button>
+        <button  class="add-task">Add Task </button>
+        <button   class="task-status-setting ">Setting </button>
     </div>
     
     <div class="container">
@@ -131,6 +134,7 @@
                 
                 <label for="">End  Date</label>
                 <input type="text" name="end_date" autocomplete="off">
+                <input type="hidden" name="_method" value="PUT"  />
             </form>
             <div class="footer">
                 <button class="primary" id="update-task">
@@ -183,11 +187,42 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div>  
+
+    <div class="popup" id="task-status-order">
+        <div class="popup-content">
+            <div class="d-flex heading">
+                <h4>
+                    Settings
+                </h4>
+                <span class="close">
+                    <svg height="14px" style="margin-top:3px" viewBox="0 0 311 311.07733" width="14px"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="m16.035156 311.078125c-4.097656 0-8.195312-1.558594-11.308594-4.695313-6.25-6.25-6.25-16.382812 0-22.632812l279.0625-279.0625c6.25-6.25 16.382813-6.25 22.632813 0s6.25 16.382812 0 22.636719l-279.058594 279.058593c-3.136719 3.117188-7.234375 4.695313-11.328125 4.695313zm0 0" />
+                        <path
+                            d="m295.117188 311.078125c-4.097657 0-8.191407-1.558594-11.308594-4.695313l-279.082032-279.058593c-6.25-6.253907-6.25-16.386719 0-22.636719s16.382813-6.25 22.636719 0l279.058594 279.0625c6.25 6.25 6.25 16.382812 0 22.632812-3.136719 3.117188-7.230469 4.695313-11.304687 4.695313zm0 0" />
+                    </svg>
+                </span>
+            </div>
+            <form action="" id="add-task-board">
+                <label for="">Title</label>
+                <ul class=" slist " id="sortlist"> 
+                </ul>
+            </form>
+            <div class="footer">
+                <button class="primary" id="update-order">
+                    Update
+                </button>
+                <button  class="close">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>  
     <div id="message" class="alert" >
         <span> content </span>
     </div>
-   
     <script src="{{  URL::asset('js/helper-script.js')}}" ></script>
     <script src="{{  URL::asset('js/script.js')}}" ></script>
 </body>

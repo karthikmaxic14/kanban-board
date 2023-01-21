@@ -38,6 +38,7 @@ Route::prefix('task-status')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [TaskStatusController::class, 'index']);
     Route::post('/', [TaskStatusController::class, 'store']);
     Route::delete('/{id}', [TaskStatusController::class, 'delete']);
+    Route::post('/update-order', [TaskStatusController::class, 'updateOrder']);
 });
 
 

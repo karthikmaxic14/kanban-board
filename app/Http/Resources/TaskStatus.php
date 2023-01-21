@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Resources;
-
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaskStatus extends JsonResource
-{
+{    
     /**
      * Transform the resource into an array.
      *
@@ -16,8 +15,8 @@ class TaskStatus extends JsonResource
     {
         return [
                 'name'=> $this->title,
-                "id"=> $this->id
-        ];
-          
+                "id"=> $this->id,
+                "order" => $this->order,
+        ]; 
     }
 }

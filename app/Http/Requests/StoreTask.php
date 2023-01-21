@@ -25,8 +25,7 @@ class StoreTask extends FormRequest
     {
         return [
             "task_name"=> "required|unique:tasks",
-            "priority"=>"required",
-            "task_type" =>"required"
+            "priority"=>"required"
         ];
     }
 }

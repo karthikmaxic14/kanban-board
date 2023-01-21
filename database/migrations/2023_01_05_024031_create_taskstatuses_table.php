@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title');
             $table->boolean('default_status');
+            $table->boolean('order');
             $table->softDeletes();
         });
     }

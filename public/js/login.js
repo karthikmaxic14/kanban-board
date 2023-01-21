@@ -18,9 +18,8 @@ $(document).ready(function(){
             formData,
             error,
             success;
-        forms = $("#form-data")[0]      
-        formData = new FormData(forms); 
-        
+        forms = $("#form-data").serializeArray();
+        formData = seralizeToJson(forms);
         success = function(Data){ 
             if (Data.status == true){
                 setToken(Data.token)
@@ -47,8 +46,8 @@ $(document).ready(function(){
             formData,
             error,
             success;
-        forms = $("#form-register")[0]      
-        formData = new FormData(forms); 
+        forms = $("#form-register").serializeArray()     
+        formData = seralizeToJson(forms);
         
         success = function(Data){ 
             if (Data.status == true){ 

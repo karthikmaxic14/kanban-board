@@ -46,9 +46,10 @@ function drag(ev) {
 
 function drop(ev) {
     ev.preventDefault();
-    var data,
-        prev_id,
-        new_id;
+    var data, 
+        new_id,
+        temp,
+        forms;
     data = ev.dataTransfer.getData("text");
     prev_id = ev.dataTransfer.getData("parent_id");
 
@@ -59,20 +60,19 @@ function drop(ev) {
         $(ev.target).closest("ul").append(document.getElementById(data));
     }
     new_id = $(ev.target).closest("ul").attr('task-board');
-    var temp = data.replace("task_name", "");
-    var forms = new FormData();;
-    forms.append("task_type", new_id);
-    forms.append("_method", "PUT");
-    http("api/task/" + temp+"/status", "post", forms, function (data) {
+    temp = data.replace("task_name", "");
+    forms = {
+        "task_type": new_id,
+        "_method": "PUT"
+    }; 
+    http("api/task/" + temp+"/status", "post", JSON.stringify(forms), function (data) {
          alertMessage(data.message, "success")   
     })  
 
 
 }
 function createTaskboard(title, id) {
-    console.log(title)
     var taskBoard, taskList_content;
-
     taskList_content = '<div class="header"><h2>' + title + '</h2>' +
         '<div class="d-flex"> ' +
         '<button class="task-close">' +
@@ -81,15 +81,15 @@ function createTaskboard(title, id) {
         '<ul task-board="' + id + '" class="list" ondrop="drop(event)" ondragover="allowDrop(event)"></ul> ';
 
     taskBoard = document.createElement("div");
-    $(taskBoard).html(taskList_content).addClass("task-list");
+    $(taskBoard).html(taskList_content).addClass("task-list").attr("task-board-id", id );
 
     return taskBoard;
 }
 function createTask({ task_name, priority, description, end_date }, id) {
-    var li;
+    var li, s;
 
     priority = getPriority(priority);
-    var s = new Date(end_date)
+    s = new Date(end_date)
 
     li = '<li id="task_name' + id + '" target-id="' + id + '" draggable="true" ondragstart="drag(event)" class="task-item">' +
         '<h4>' + task_name + '</h4>' +
@@ -151,6 +151,13 @@ function getTaskData() {
         }
     };
     http("api/task", "GET", null, success)
+}
+function renderTaskStatus (data){
+    var content =""; 
+    for (var list in data){
+         content = content+ "<li draggable='true' id='"+data[list].id+"' order='"+data[list].order+"'  >" + data[list].name + "</li>";
+    } 
+    $("#sortlist").html(content);
 }
 
 $(document).ready(function () {
@@ -215,9 +222,9 @@ $(document).ready(function () {
             $("#edit-task [name='task_name']").val(editVal.task_name);
             $("#edit-task [name='description']").val(editVal.description);
             $("#edit-task [name='priority']").val(priority);
-            var start_date = new Date(editVal.start_date)
+            start_date = new Date(editVal.start_date)
             $("#edit-task [name='start_date']").val(start_date.getFullYear() + "-" + ('0' + (start_date.getMonth() + 1)).slice(-2) + "-" + start_date.getDate());
-            var end_date = new Date(editVal.end_date)
+            end_date = new Date(editVal.end_date)
             $("#edit-task [name='end_date']").val(end_date.getFullYear() + "-" + ('0' + (end_date.getMonth() + 1)).slice(-2) + "-" + end_date.getDate());
             $("#edit-task").show();
         })
@@ -246,19 +253,21 @@ $(document).ready(function () {
      * Add task list
      */
     $("#new-task-board .primary").on("click", function (e) {
-        var title, taskB_id;
+        var title,
+            formData,
+            forms,
+            board;
+
         title = $("[name='task-board-title']").val();
-
-
-        var formData = $("#add-task-board")[0]
-        var forms = new FormData(formData);
+        formData = $("#add-task-board").serializeArray()
+        
+        forms = seralizeToJson( formData);
         http("api/task-status", "POST", forms, function (result) {
-             var board = createTaskboard(result.data.name, result.data.id)
+            board = createTaskboard(result.data.name, result.data.id)
             $(".btn-board").before(board);
             alertMessage(result.message, "success");
             },
             function (result) {
-                console.log(result.message);
                 alertMessage(result.message, null)
             })
         $("[name='task-board-title']").val("");
@@ -278,10 +287,8 @@ $(document).ready(function () {
 
         target = $("#new-task").attr("data-target");
         $("#task_type").val(target);
-        let formData = $("#add-task")[0]
-
-        let forms = new FormData(formData);
-
+        let formData = $("#add-task").serializeArray();
+        let forms =  seralizeToJson(formData);  
         let success = function (data) {
             var item = createTask(data.data, data.data.id)
             $("[task-board='" + data.data.task_type + "']").prepend(item);
@@ -302,20 +309,13 @@ $(document).ready(function () {
     $("#update-task").on("click", function (e) {
         var val,
             task_item, forms, success, error;
+
         task_item = $("#edit-task").attr("data-task-id")
         val = $("#editfrm-task").serializeArray();
-        priority_id = getPriorityID(val[2].value);
-        
-        forms = new FormData();;
-        forms.append("task_name", val[0].value);
-        forms.append("description", val[1].value);
-        forms.append("priority", priority_id);
-        forms.append("start_date", val[3].value);
-        forms.append("end_date", val[4].value);
-        forms.append("_method", "PUT");
-        
-        success = function (data) {
+        val[2].value = getPriorityID(val[2].value);
+        forms = seralizeToJson(val);
 
+        success = function (data) {
             $("#task_name" + task_item).replaceWith(createTask(data.data, data.data.id));
             window.task[task_item] = data.data;
         };
@@ -335,7 +335,7 @@ $(document).ready(function () {
     $(".logout").on("click", function (e) {
         e.preventDefault();
         let success = function (data) {
-            console.log(data.staus);
+            
             if (data.status) {
                 removeToken("token");
                 window.location = "http://localhost:8000/login";
@@ -370,6 +370,30 @@ $(document).ready(function () {
         $("#new-task-board").show();
 
     });
+    $(".task-status-setting").on("click", function (e) {
+        let success =  function(result){
+            renderTaskStatus(result.data);
+            slist(document.getElementById("sortlist"));
+        }
+        http("api/task-status", "GET", null,success );
+        $("#task-status-order").show();
+    });
+
+    $("#update-order").on("click", function(e){
+        e.preventDefault();
+        var formData = [];
+        $("#sortlist li").each(function(i, e){
+            formData.push({"id":$(e).attr("id"), "order": i+1})
+        }) 
+        http("api/task-status/update-order", "POST", JSON.stringify(formData), function(data){
+            changeOrder(formData);
+            $("#task-status-order").hide();
+            alertMessage(data.message, "success")
+        }, function (data){
+            console.log(data);
+        })
+    })
 
 
+    slist(document.getElementById("sortlist"));
 })
