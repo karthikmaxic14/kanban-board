@@ -223,9 +223,9 @@ $(document).ready(function () {
             $("#edit-task [name='description']").val(editVal.description);
             $("#edit-task [name='priority']").val(priority);
             start_date = new Date(editVal.start_date)
-            $("#edit-task [name='start_date']").val(start_date.getFullYear() + "-" + ('0' + (start_date.getMonth() + 1)).slice(-2) + "-" + start_date.getDate());
+            $("#edit-task [name='start_date']").val(start_date.getFullYear() + "-" + ('0' + (start_date.getMonth() + 1)).slice(-2) + "-" + ('0'+ start_date.getDate()).slice(-2));
             end_date = new Date(editVal.end_date)
-            $("#edit-task [name='end_date']").val(end_date.getFullYear() + "-" + ('0' + (end_date.getMonth() + 1)).slice(-2) + "-" + end_date.getDate());
+            $("#edit-task [name='end_date']").val(end_date.getFullYear() + "-" + ('0' + (end_date.getMonth() + 1)).slice(-2) + "-" + ("0"+end_date.getDate()).slice(-2));
             $("#edit-task").show();
         })
         .on("click", ".task-close", function (e) { 
