@@ -2,7 +2,7 @@
 Kanban Board using Laravel with Jquery and sanctum
 
 
-![Screenshot](https://github.com/karthikmaxic14/kanban-board/main/screenshot.png)
+![Screenshot](https://raw.github.com/karthikmaxic14/kanban-board/main/screenshot.png)
 
 
 ### Quick Project Setup
