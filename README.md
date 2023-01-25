@@ -1,6 +1,10 @@
 # Kanban Board in Laravel  and  Sanctum Rest API
 Kanban Board using Laravel with Jquery and sanctum
 
+
+![Screenshot](https://github.com/karthikmaxic14/kanban-board/main/screenshot.png)
+
+
 ### Quick Project Setup
 
 1. Run ** git clone https://github.com/karthikmaxic14/kanban-board **
